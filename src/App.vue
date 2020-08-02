@@ -1,18 +1,30 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <a href="https://slack.com/oauth/v2/authorize?client_id=216559041989.1262107973383&scope=incoming-webhook&user_scope=">
+    <img
+      alt="Add to Slack"
+      height="40"
+      width="139"
+      src="https://platform.slack-edge.com/img/add_to_slack.png"
+      srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" />
+  </a>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import axios from 'axios'
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  mounted() {
+    const q = this.$route.query
+    if (q.code != null) {
+      axios.post('https://slack.com/api/oauth.v2.access', {code: q.code})
+        .then(res => {
+          console.log(res.data)
+        })
+        .catch(e => console.error(e))
+    }
+  },
 }
 </script>
 
